@@ -1,0 +1,181 @@
+@import url(./vars.css);
+*{
+	margin: 0rem;
+	padding: 0rem;
+	box-sizing: border-box;
+	font-family: sans-serif;
+}
+
+.flex{
+	display: flex;
+}
+.grid{
+	display: grid;
+}
+.fcol{
+	flex-direction: column;
+}
+.wrapper{
+	height: 100vh;
+	width: 100vw;
+}
+.header{
+	height: 3.5rem;
+	width: 100%;
+	padding-left: 1rem;
+}
+.jc{
+	justify-content: center;
+}
+.ai{
+	align-items: center;
+}
+.brand{
+	height: 2rem;
+	user-select: none;
+	width: fit-content;
+	gap: .1rem;
+	.cloud{
+		height: 100%;
+		width: fit-content;
+		display: grid;
+		place-items: center;
+		span{
+			font-size: 1.8rem;
+		}
+	}
+}
+.f1-3{
+	font-size: 1.3rem;
+}
+.f2{
+	font-size: 2rem;
+}
+.f3{
+	font-size: 3rem;
+}
+.f-9{
+	font-size: .9rem;
+}
+.bold600{
+	font-weight: 600;
+}
+.color-txt1{
+	color: var(--txt-color);
+}
+.color-txt2{
+	color: var(--txt-color2);
+}
+.color-txt3{
+	color: var(--txt-color3);
+}
+.color-txt4{
+	color: var(--txt-color4);
+}
+.bg1{
+	background-color: var(--bg-color);
+}
+.bg2{
+	background-color: var(--bg-color-header);
+}
+.bg3{
+	background-color: var(--estacion);
+}
+.font-mono{
+	font-family: "Space mono";
+}
+.font-bri{
+	font-family: "Bricolage Grotesque";
+}
+.content,.content2,.content3{
+	width: 100%;
+	height: calc(100% - 7.5rem);
+}
+.content{
+	gap: 1rem;
+	p{
+		width: 45rem;
+		text-align: center;
+	}
+	a{
+		height: 3rem;
+		width: 9rem;
+		text-decoration: none;
+		transition: all .1s ease-in;
+		user-select: none;
+	}
+	a:hover{
+		background-color: rgb(0, 83, 124);
+	}
+}
+.content2{
+	padding-top: 1rem;
+	.estaciones{
+		height: 100%;
+		width: 80%;
+		align-items: baseline;
+		gap: 1rem;
+		.estaciones-title{
+			height: fit-content;
+		}
+		#container{
+			flex-wrap: wrap;
+			width: 100%;
+			height: fit-content;
+			gap: 1.5rem;
+
+			/* grid-template-columns: repeat(3,20rem); */
+			a{
+				background-color: var(--estacion);
+				height: 7rem;
+				flex: 0 0 21rem;
+				border-radius: .5rem;		
+				padding: .5rem .8rem;
+				text-decoration: none;
+				user-select: none;
+				transition: all .1s ease-in;
+				.ubicacion,.usuarios{
+					gap: .5rem;
+				}
+				.usuarios{
+					align-self: flex-end;
+					margin-top: 1rem;
+				}
+			}
+			a:hover{
+				scale: 1.025;
+			}
+		}
+	}	
+}
+.content3{
+	.datos-estacion{
+		height: 30rem;
+		width: 45rem;
+		border: 1px solid var(--bg-color-header);
+		padding: 2rem;
+		gap: 2rem;
+		.elem-title{
+			font-weight: 600;
+		}
+		.elem-dato{
+			color: var(--txt-color5);
+		}
+	}
+}
+#chipid{
+	display: none;
+}
+.jcsb{
+	justify-content: space-between;
+}
+.footer{
+	width: 100%;
+	height: 4rem;
+	border-top: 1px solid var(--bg-color-header);
+	padding-left: 1rem;
+	user-select: none;
+}
+::-webkit-scrollbar{
+	display: none;
+}
