@@ -14,6 +14,8 @@
 	<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
 
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <template id="tpl_estacion">
 	<a class="bg3 flex fcol" href="" id="">
@@ -31,57 +33,403 @@
 			</div>
 		</div>
 		 
-		<div class="content3 bg1 color-txt1 flex ai jc">
+		<div class="content3 bg1 color-txt1 flex ai">
 			<div class="datos-estacion flex fcol">
 				<div id="chipid">{{CHIPID}}</div>
-				<div class="estacion-name f2 bold600">Detalles de la Estación Meteorológica</div>
+				<div class="estacion-name f2 bold600 flex jc">Detalles de la Estación Meteorológica</div>
 				<div class="estacion-elem flex jcsb f1-3">
 					<div class="elem-title font-mono">Apodo</div>
-					<div class="elem-dato elem-apodo font-mono"></div>
+					<div class="elem-dato font-mono flex ai"><div class="font-mono flex ai color-txt1" id="elem_apodo"></div></div>
 				</div>
 				<div class="estacion-elem flex jcsb f1-3">
 					<div class="elem-title font-mono">Ubicación</div>
-					<div class="elem-dato elem-ubicacion font-mono"></div>
+					<div class="elem-dato  flex ai"><i class="fa-solid fa-location-dot color-txt3"></i><div class="font-mono flex ai color-txt1" id="elem_ubicacion"></div></div>
 				</div>
 				<div class="estacion-elem flex jcsb f1-3">
 					<div class="elem-title font-mono">Temperatura</div>
-					<div class="elem-dato elem-temperatura font-mono"></div>
+					<div class="elem-dato font-mono flex ai"><i class="fa-solid fa-temperature-three-quarters color-txt5"></i><div class="font-mono flex ai color-txt1" id="elem_temperatura"></div></div>
 				</div>
 				<div class="estacion-elem flex jcsb f1-3">
 					<div class="elem-title font-mono">Humedad</div>
-					<div class="elem-dato elem-humedad font-mono"></div>
+					<div class="elem-dato font-mono flex ai"><i class="fa-solid fa-droplet color-txt6"></i><div class="font-mono flex ai color-txt1" id="elem_humedad"></div></div>
 				</div>
 				<div class="estacion-elem flex jcsb f1-3">
 					<div class="elem-title font-mono">Velocidad del Viento</div>
-					<div class="elem-dato elem-velocidad font-mono"></div>
+					<div class="elem-dato font-mono flex ai"><i class="fa-solid fa-wind color-txt7"></i><div class="font-mono flex ai color-txt1" id="elem_viento"></div></div>
 				</div>
 				<div class="estacion-elem flex jcsb f1-3">
 					<div class="elem-title font-mono">Presión Atmosférica</div>
-					<div class="elem-dato elem-presion font-mono"></div>
+					<div class="elem-dato font-mono flex ai"><i class="fa-solid fa-circle-arrow-down color-txt8"></i><div class="font-mono flex ai color-txt1" id="elem_presion"></div></div>
+				</div>
+				<div class="estacion-elem flex jcsb f1-3">
+					<div class="elem-title font-mono">Fuego</div>
+					<div class="elem-dato font-mono flex ai"><i class="fa-solid fa-fire color-txt9"></i><div class="font-mono flex ai color-txt1" id="elem_fuego"></div></div>
+				</div>
+			</div>
+			<div class="datos-grafico bg4 flex fcol">
+				<div class="botonera flex">
+					<button id="temperatura" class="button flex ai jc bg2" onclick="cambiar(id)"><div class="btn-icon"><i class="fa-solid fa-temperature-three-quarters color-txt5"></i></div><div class="btn-title font-bri bold600 color-txt1">Temperatura</div></button>
+					<button id="humedad" class="button flex ai jc bg2" onclick="cambiar(id)"><div class="btn-icon"><i class="fa-solid fa-droplet color-txt6"></i></div><div class="btn-title bold600 color-txt1">Humedad</div></button>
+					<button id="viento" class="button flex ai jc bg2" onclick="cambiar(id)"><div class="btn-icon"><i class="fa-solid fa-wind color-txt7"></i></div><div class="btn-title bold600 color-txt1">Velocidad del Viento</div></button>
+					<button id="presion" class="button flex ai jc bg2" onclick="cambiar(id)"><div class="btn-icon"><i class="fa-solid fa-circle-arrow-down color-txt8"></i></div><div class="btn-title bold600 color-txt1">Presión Atmosférica</div></button>
+					<button id="fuego" class="button flex ai jc bg2" onclick="cambiar(id)"><div class="btn-icon"><i class="fa-solid fa-fire color-txt9"></i></div><div class="btn-title bold600 color-txt1">Fuego</div></button>
+				</div>
+				<div class="detalles flex fcol">
+					<!-- temperatura -->
+					<div class="datos-detalles flex ai jcse" id="temperatura_box">
+						<div class="cuadro flex">
+							<div class="cuadro-title flex ai jcse bold600">
+								<i class="fa-solid fa-temperature-three-quarters fa-rotate-90 color-txt5"></i>Temperatura
+							</div>
+							<div class="cuadro-info flex fcol">
+								<div class="grande flex">
+									<div class="texto-grande" id="temp"></div>
+									<div class="texto-chico flex fcol">
+										<div class="bold600">°C</div>
+										<div class="bold600" id="temp_dec"></div>
+									</div>
+								</div>
+								<div class="chico flex jcsb">
+									<div class="chico-content flex fcol bold600">
+										<div class="flex ai chico-content-text"><i class="fa-solid fa-caret-down color-txt8"></i>Mínima</div>
+										<div class="chico-dato flex jc" id="temp_min"></div>
+									</div>
+									<div class="chico-content flex fcol bold600">
+										<div class="flex ai chico-content-text"><i class="fa-solid fa-caret-up color-txt7"></i>Máxima</div>
+										<div class="chico-dato flex jc" id="temp_max"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="cuadro flex">
+							<div class="cuadro-title flex ai jcse bold600">
+								<i class="fa-solid fa-person fa-rotate-90 color-txt10"></i>Sensación
+							</div>
+							<div class="cuadro-info flex fcol">
+								<div class="grande flex">
+									<div class="texto-grande" id="sens"></div>
+									<div class="texto-chico flex fcol">
+										<div class="bold600">°C</div>
+										<div class="bold600" id="sens_dec"></div>
+									</div>
+								</div>
+								<div class="chico flex jcsb">
+									<div class="chico-content flex fcol bold600">
+										<div class="flex ai chico-content-text"><i class="fa-solid fa-caret-down color-txt8"></i>Mínima</div>
+										<div class="chico-dato flex jc" id="sens_min">-99.99°C</div>
+									</div>
+									<div class="chico-content flex fcol bold600">
+										<div class="flex ai chico-content-text"><i class="fa-solid fa-caret-up color-txt7"></i>Máxima</div>
+										<div class="chico-dato flex jc" id="sens_max">99.99°C</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- humedad -->
+					<div class="datos-detalles flex ai jcse dnone" id="humedad_box">
+						<div class="cuadro flex">
+							<div class="cuadro-title flex ai jcse bold600">
+								<i class="fa-solid fa-droplet fa-rotate-90 color-txt6"></i>Humedad
+							</div>
+							<div class="cuadro-info flex fcol">
+								<div class="grande2 flex ai">
+									<div class="texto-grande" id="hum"></div>
+									<div class="texto-chico flex fcol">
+										<div class="bold600">%</div>
+										<div class="bold600" id="hum_dec"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- viento -->
+					<div class="datos-detalles flex ai jcse dnone" id="viento_box">
+						<div class="cuadro flex">
+							<div class="cuadro-title flex ai jcse bold600">
+								<i class="fa-solid fa-wind fa-rotate-90 color-txt7"></i><div class="flex ai jc ta">Velocidad del Viento</div>
+							</div>
+							<div class="cuadro-info flex fcol">
+								<div class="grande flex">
+									<div class="texto-grande" id="vien"></div>
+									<div class="texto-chico flex fcol">
+										<div class="bold600">km/h</div>
+										<div class="bold600" id="vien_dec"></div>
+									</div>
+								</div>
+								<div class="chico flex jc">
+									<div class="chico-content flex fcol bold600">
+										<div class="flex ai chico-content-text"><i class="fa-solid fa-caret-up color-txt7"></i>Máxima</div>
+										<div class="chico-dato flex jc" id="vien_max"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="cuadro flex">
+							<div class="cuadro-title2 flex ai jc bold600">
+								<i class="fa-solid fa-compass color-txt8"></i><div class="flex ai jc ta f1-3" id="veleta"></div>
+							</div>
+						</div>
+					</div>
+					<!-- presion -->
+					<div class="datos-detalles flex ai jcse dnone" id="presion_box">
+						<div class="cuadro flex">
+							<div class="cuadro-title flex ai jcse bold600">
+								<i class="fa-solid fa-circle-arrow-down fa-rotate-90 color-txt8"></i>Presión
+							</div>
+							<div class="cuadro-info flex fcol">
+								<div class="grande2 flex ai">
+									<div class="texto-grande" id="pres"></div>
+									<div class="texto-chico flex fcol">
+										<div class="bold600">hPa</div>
+										<div class="bold600" id="pres_dec"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- fuego -->
+					<div class="datos-detalles flex ai jcse dnone" id="fuego_box">
+						<div class="cuadro2 flex fcol jcse">
+							<div class="chico-content flex fcol bold600">
+								<div class="flex ai chico-content-text jc">FFMC</div>
+								<div class="chico-dato flex jc" id="ffmc"></div>
+							</div>
+							<div class="chico-content flex fcol bold600">
+								<div class="flex ai chico-content-text jc">DMC</div>
+								<div class="chico-dato flex jc" id="dmc"></div>
+							</div>
+							<div class="chico-content flex fcol bold600">
+								<div class="flex ai chico-content-text jc">DC</div>
+								<div class="chico-dato flex jc" id="dc"></div>
+							</div>
+						</div>
+						<div class="cuadro-title2 flex ai jcse bold600">
+							<i class="fa-solid fa-fire color-txt9"></i>Fuego
+						</div>
+						<div class="cuadro2 flex fcol jcse">
+							<div class="chico-content flex fcol bold600">
+								<div class="flex ai chico-content-text jc">ISI</div>
+								<div class="chico-dato flex jc" id="isi"></div>
+							</div>
+							<div class="chico-content flex fcol bold600">
+								<div class="flex ai chico-content-text jc">BUI</div>
+								<div class="chico-dato flex jc" id="bui"></div>
+							</div>
+							<div class="chico-content flex fcol bold600">
+								<div class="flex ai chico-content-text jc">FWI</div>
+								<div class="chico-dato flex jc" id="fwi"></div>
+							</div>
+						</div>
+					</div>
+					<!-- graph -->
+					<div class="graph flex ai jc">
+						<canvas id="graph_canvas"></canvas>
+					</div>
 				</div>
 			</div>
 		</div>
-		 
+		
 		<div class="footer bg1 flex ai">
 			<p class="font-mono color-txt1 f-9">© 2024 App-Estación by lightbblue. Todos los derechos reservados.</p>
 		</div> 
 	</div>
 	<script type="text/javascript">
-		let id = chipid.innerText;
+		const CHIPID = chipid.innerText;
+		const INTERVAL_REFRESH = 60000;
+		const ESTACIONES_ENDPOINT = `https://mattprofe.com.ar/proyectos/app-estacion/datos.php?chipid=${CHIPID}&cant=7`;
+		let graph = null;
+		let ventanaActual = "temperatura"
 
-		async function getAllEstaciones(){
-			const response = await fetch("https://mattprofe.com.ar/proyectos/app-estacion/datos.php?mode=list-stations");
+		refresh();
+		setInterval(refresh, INTERVAL_REFRESH);
+
+		function refresh(){
+			getEstaciones(ESTACIONES_ENDPOINT).then(data => {
+				dataProcess(data);
+				reemplazar(data[0]);
+			})
+		}
+
+		function fireDanger(fwi) {
+			let fwiFloat = parseFloat(fwi)
+			if (fwiFloat >= 50) {
+				return "Extremo"
+			} else if (fwiFloat >= 38) {
+				return "Muy alto"
+			} else if (fwiFloat >= 21.3) {
+				return "Alto"
+			} else if (fwiFloat >= 11.2) {
+				return "Moderado"
+			} else if (fwiFloat >= 5.2) {
+				return "Bajo"
+			} else {
+				return "Muy bajo"
+			}
+		}
+
+		async function getEstaciones(endpoint){
+			const response = await fetch(endpoint);
 			const data = await response.json();
 			return data;
 		}
-		
-		getAllEstaciones()
-		.then((response)=>{response.forEach(e => {
-			if(e.chipid==id){
-				document.querySelector(".elem-apodo").innerHTML=e.apodo;
-				document.querySelector(".elem-ubicacion").innerHTML=e.ubicacion;
+
+		function reemplazar(e){
+			elem_apodo.innerHTML=e.estacion;
+			elem_ubicacion.innerHTML=e.ubicacion;
+			elem_temperatura.innerHTML=e.temperatura.split(".")[0]+"°C";
+			elem_humedad.innerHTML=e.humedad.split(".")[0]+"%";
+			elem_viento.innerHTML=e.viento.split(".")[0]+"km/h";
+			elem_presion.innerHTML=e.presion.split(".")[0]+"hPa";
+			elem_fuego.innerHTML=fireDanger(e.fwi);
+
+			temp.innerHTML=e.temperatura.split(".")[0];
+			temp_dec.innerHTML="."+e.temperatura.split(".")[1];
+			temp_min.innerHTML=e.tempmin+"°C";
+			temp_max.innerHTML=e.tempmax+"°C";
+			sens.innerHTML=e.sensacion.split(".")[0];
+			sens_dec.innerHTML="."+e.sensacion.split(".")[1];
+			sens_min.innerHTML=e.sensamin+"°C";
+			sens_max.innerHTML=e.sensamax+"°C";
+
+			hum.innerHTML=e.humedad.split(".")[0];
+			hum_dec.innerHTML="."+e.humedad.split(".")[1];
+
+			vien.innerHTML=e.viento.split(".")[0];
+			vien_dec.innerHTML="."+e.viento.split(".")[1];
+			vien_max.innerHTML=e.maxviento+"km/h";
+			veleta.innerHTML=e.veleta;
+
+			pres.innerHTML=e.presion.split(".")[0];
+			pres_dec.innerHTML="."+e.presion.split(".")[1];
+
+			ffmc.innerHTML=e.ffmc;
+			dmc.innerHTML=e.dmc;
+			dc.innerHTML=e.dc;
+			isi.innerHTML=e.isi;
+			bui.innerHTML=e.bui;
+			fwi.innerHTML=fireDanger(e.fwi);
+		}
+
+		function cambiar(id) {
+			document.querySelector(`#${ventanaActual}_box`).classList.add("dnone")
+			ventanaActual = id;
+			document.querySelector(`#${ventanaActual}_box`).classList.remove("dnone")
+			getEstaciones(ESTACIONES_ENDPOINT).then(data => {
+				dataProcess(data);
+			})
+		}
+
+		function dataProcess(data) {
+			const item = data[0]
+
+			let arr_temp = []
+			let arr_hum = []
+			let arr_pres = []
+			let arr_viento = []
+			let arr_fuego = []
+			let arr_fecha = []
+			const actual = data[0];
+
+			data.shift();
+			data.forEach(e => {
+				const fechaCompleta = e.fecha;
+				const [_, horaCompleta] = fechaCompleta.split(" ");
+				const [hora, minutos, segundos] = horaCompleta.split(":");
+				const horaMinutos = `${hora}:${minutos}`
+				arr_fecha.unshift(horaMinutos)
+
+				arr_temp.unshift(e.temperatura);
+				arr_hum.unshift(e.humedad);
+				arr_viento.unshift(e.viento);
+				arr_fuego.unshift(e.fwi);
+				arr_pres.unshift(e.presion);
+			});
+
+			let actualData
+			let bgColor = ''
+			switch (ventanaActual) {
+				case 'temperatura':
+					actualData = arr_temp;
+					bgColor = "rgb(146, 177, 222)"
+					break;
+				case 'humedad':
+					actualData = arr_hum;
+					bgColor = "rgb(12, 177, 234)"
+					break;
+				case 'presion':
+					actualData = arr_pres;
+					bgColor = "rgb(253, 31, 72)"
+					break;
+				case 'fuego':
+					actualData = arr_fuego;
+					bgColor = "rgb(237, 112, 8)"
+					break;
+				case 'viento':
+					actualData = arr_viento;
+					bgColor = "rgb(82, 218, 167)"
+					break;
+				default:
+					break;
 			}
-		})})
+			const values = {
+				labels: arr_fecha,
+				datasets: [{
+					label: (ventanaActual == "fuego") ? "FWI" : ventanaActual[0].toUpperCase()+ventanaActual.substring(1),
+					backgroundColor: bgColor,
+					borderColor: bgColor,
+					data: actualData,
+					tension: 0.4,
+					pointStyle: 'circle',
+					pointRadius: 6,
+					pointHoverRadius: 10
+				}]
+			}
+			render(values);
+		}
+		function render(values) {
+			if (graph) {
+				graph.destroy(); 
+			}
+
+			const options = {
+				indexAxis: 'x',
+				responsive: true,
+				scales: {
+					x: {
+						ticks: {
+							color: 'black'
+						}
+					},
+					y: {
+						beginAtZero: true, 
+						ticks: {
+							color: 'black'
+						},
+						grid: {
+							display: true, 
+							color: 'rgba(200, 200, 200, 0.5)' 
+						}
+					}
+				},
+				plugins: {
+					legend: {
+						display: false 
+					}
+				},
+				animation: {
+					duration: 0
+				}
+			};
+
+
+			const config = {
+				type: 'line',
+				data: values,
+				options: options
+			}
+			graph = new Chart(document.querySelector("#graph_canvas").getContext('2d'), config)
+		}
 	</script>
 </body>
 </html>
