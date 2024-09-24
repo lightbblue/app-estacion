@@ -22,7 +22,17 @@
 .header{
 	height: 3.5rem;
 	width: 100%;
-	padding-left: 1rem;
+	padding: .5rem 1rem;
+	.btn-login{
+		height: 100%;
+		padding: 0 1rem;
+		transition: all .1s ease-in;
+		user-select: none;
+		text-decoration: none;
+	}
+	.btn-login:hover{
+		background-color: rgb(0, 53, 100);
+	}
 }
 .jc{
 	justify-content: center;
@@ -102,6 +112,9 @@
 .bg4{
 	background-color: var(--bg-color2);
 }
+.bg5{
+	background-color: var(--bg-color3);
+}
 .font-mono{
 	font-family: "Space mono";
 }
@@ -111,6 +124,46 @@
 .content,.content2,.content3{
 	width: 100%;
 	height: calc(100% - 7.5rem);
+}
+.content4{
+	width: 100%;
+	height: calc(100% - 4rem);
+	.form{
+		width: 30rem;
+		height: fit-content;
+		padding: 1.5rem;
+		border: 1px solid var(--bg-color-header);
+		border-radius: .2rem;
+		gap: 1rem;
+		.form-content{
+			width: 100%;
+			justify-content: left;
+			gap: 1rem;
+			.forgot.goto{
+				width: 100%;
+				text-decoration: none;
+			}
+			input{
+				border: none;
+				outline: none;
+				border: 1px solid var(--bg-color-header);
+				height: 2.5rem;
+				padding: 0 1rem;
+			}
+			.btn-submit{
+				width: 100%;
+				height: 2.5rem;
+				outline: none;
+				border: none;
+			}
+			.btn-submit:hover{
+				cursor: pointer;
+				background-color: rgb(0, 83, 124);
+				
+				transition: all .1s ease-in;
+			}
+		}
+	}
 }
 .content{
 	gap: 1rem;
@@ -299,6 +352,21 @@
 }
 .dnone{
 	display: none!important;
+}
+.btn-logout{
+	height: 100%;
+	padding: 0 1rem;
+	width: 6rem;
+	user-select: none;
+	text-decoration: none;
+	transition: all .1s ease-in-out;
+	border-radius: .1rem;
+}
+.btn-logout:hover{
+	background-color: rgb(0, 53, 100);
+}
+.msg-box{
+	color: red;
 }
 .footer{
 	width: 100%;
