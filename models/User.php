@@ -71,41 +71,47 @@
 				}
 
 		function getBrowser($userAgent) {
-    $browserArray = [
-        'Google Chrome' => 'Chrome',
-        'Mozilla Firefox' => 'Firefox',
-        'Internet Explorer' => 'MSIE|Trident',
-        'Safari' => 'Safari',
-        'Opera' => 'Opera|OPR',
-        'Microsoft Edge' => 'Edg', // Edge usa 'Edg' como parte del User-Agent
-    ];
+            $browserArray = [
+                'Google Chrome' => 'Chrome',
+                'Mozilla Firefox' => 'Firefox',
+                'Internet Explorer' => 'MSIE|Trident',
+                'Safari' => 'Safari',
+                'Opera' => 'Opera|OPR',
+                'Microsoft Edge' => 'Edg', // Edge usa 'Edg' como parte del User-Agent
+            ];
 
-    foreach ($browserArray as $browser => $pattern) {
-        if (preg_match("/$pattern/i", $userAgent)) {
-            return $browser;
+            foreach ($browserArray as $browser => $pattern) {
+                if (preg_match("/$pattern/i", $userAgent)) {
+                    return $browser;
+                }
+            }
+
+            return 'Unknown Browser';
         }
-    }
+		function dataCants(){
+            $accesos = $this -> query("SELECT COUNT(*) AS cantidad_accesos FROM appestacion__tracker"); 
+            $registros = $this -> query("SELECT COUNT(*) AS cantidad_registros FROM appestacion__users"); 
+            return [$accesos[0] ,$registros[0]];
+        }
+        function list_clients_location(){
+            return $this -> query("SELECT ip, latitud, longitud,COUNT(*) AS cantidad_accesos FROM appestacion__tracker GROUP BY ip, latitud, longitud"); 
+        }
+        function addTracker($web){
+            $data = json_decode($web);
 
-    return 'Unknown Browser';
-}
-		/**
-		 * 
-		 * Hace soft delete del registro
-		 * @return bool siempre verdadero
-		 * 
-		 * */
-		function leaveOut(){
+            $userAgent = $_SERVER['HTTP_USER_AGENT'];
 
-			$id = $this->id;
-			$fecha_hora = date("Y-m-d H:i:s");
+            $os = $this->getOS($userAgent);
+			$browser = $this->getBrowser($userAgent);
+            $latitud = $data -> latitude;
+            $longitud = $data -> longitude;
+            $pais = $data -> country;
+            $ip = $_SERVER['REMOTE_ADDR'];
+            $token = md5($_ENV['PROJECT_WEB_TOKEN'].$_SESSION['morphyx']['user'] -> email);
 
-			$ssql = "UPDATE appestacion__users SET delete_at='$fecha_hora' WHERE id=$id";
-
-			$this->query($ssql);
-
-			return true;
-		}
-
+            $ssql = "INSERT INTO appestacion__tracker (token, ip, latitud, longitud, pais, navegador, sistema, add_date) VALUES ('$token','$ip','$latitud', '$longitud','$pais','$browser','$os',NOW())";
+            $this->query($ssql); 
+        }
 		/**
 		 * 
 		 * Nose q hace pero es el blocked

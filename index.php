@@ -34,7 +34,7 @@
 	//=== firewall
 
 	// Listas de acceso dependiendo del estado del usuario
-	$controlador_login = ["panel", "logout", "perfil", "abandonar","detalle"];
+	$controlador_login = ["panel", "logout", "perfil", "abandonar","detalle","administrator","map"];
 	$controlador_anonimo = ["landing", "login", "register","validate","recovery","reset"];
 
 	// sesion iniciada

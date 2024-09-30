@@ -1,10 +1,14 @@
 <?php
 	// crea un usuario
-	// $users = new User();
+	$user = new User();
 
 	// crea el objeto con la vista
 	$tpl = new Kiwi("panel");
 
+	$ip = $_SERVER['REMOTE_ADDR'];
+    $web = file_get_contents("http://ipwho.is/".$ip);
+	
+	$user -> addTracker($web);
 	// carga la vista
 	$tpl->loadTPL();
 
